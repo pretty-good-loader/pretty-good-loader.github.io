@@ -1,0 +1,158 @@
+{"0": {
+    "doc": "About",
+    "title": "What is PGL?",
+    "content": "Pretty Good Loader (PGL) is a solution for easily moving data from file sources into database destinations. PGL solves for such complexities as change tracking, testing, and reusability that many other data loader solutions do not. ",
+    "url": "http://localhost:4000/#what-is-pgl",
+    "relUrl": "/#what-is-pgl"
+  },"1": {
+    "doc": "About",
+    "title": "What is a PGL project?",
+    "content": "A PGL project is a collection of pipelines for loading data from file sources to database destinations. These pipelines can be related or unrelated. Each pipeline is independent and organization around your pipelines is completely up to you. ",
+    "url": "http://localhost:4000/#what-is-a-pgl-project",
+    "relUrl": "/#what-is-a-pgl-project"
+  },"2": {
+    "doc": "About",
+    "title": "What is a PGL pipeline?",
+    "content": "A PGL pipeline is a singular source and destination for data to be extracted from and loaded to. For example, a file to be picked up off an SFTP, and loaded into a PostgreSQL database. ",
+    "url": "http://localhost:4000/#what-is-a-pgl-pipeline",
+    "relUrl": "/#what-is-a-pgl-pipeline"
+  },"3": {
+    "doc": "About",
+    "title": "How do I use PGL?",
+    "content": "PGL is a command-line interface used to execute any or all pipelines in a project. PGL itself is not a scheduler. PGL’s purpose is to facilitate moving data from outside a database, into a database with as little configuration as possible. You can execute a PGL pipeline yourself in an adhoc fashion as a single command, or on a regular basis with a job scheduler of your choice. ",
+    "url": "http://localhost:4000/#how-do-i-use-pgl",
+    "relUrl": "/#how-do-i-use-pgl"
+  },"4": {
+    "doc": "About",
+    "title": "Why would I use PGL?",
+    "content": "Although not incredibly complicated, the amount of code it takes to stand up a reliable data pipeline is non-trivial. Data Engineers frequently spend time coding modules to fetch files from an SFTP, unzip those files, standardize those files into something a database can utilize, and load that data into tables. And even after those modules are created, they still need to be strung together in a way that is repeatable for many files and diverse file types. PGL abstracts this work so Data Engineers can focus on what needs to happen once the data is in the database, and more quickly start to provide value for downstream stakeholders. Additionally, PGL is not a front-end only tool. PGL is controlled through configuration documents in the form of YAML. Pipelines made with PGL are easy to source control, and support multi-environment deployments through variables. This allows for several workflows unique to PGL, not found in UI point and click style interfaces. First, Data Engineers can have testable data flows without having to define the same pipeline twice by having both production and non-production source and destination connection variables. Second, Data Engineers can easily load data from multiple production sources to multiple production destinations with a singular pipeline just by defining separate environments. Lastly, pipelines can be easily migrated from one destination to another by editing the destination and not changing any other part of the pipeline definition. ",
+    "url": "http://localhost:4000/#why-would-i-use-pgl",
+    "relUrl": "/#why-would-i-use-pgl"
+  },"5": {
+    "doc": "About",
+    "title": "What do I need to know to get started?",
+    "content": "Before getting started make sure you are familiar with contributing to a Git Repo and understand environment variables and secret management. These are all important to have a good handle on because data extraction and loading involves sensetive credentials. Understanding cloud services is a considerable advantage as well, although pgl can run on local files if that is not available. Next up: Variables -&gt; . ",
+    "url": "http://localhost:4000/#what-do-i-need-to-know-to-get-started",
+    "relUrl": "/#what-do-i-need-to-know-to-get-started"
+  },"6": {
+    "doc": "About",
+    "title": "About",
+    "content": " ",
+    "url": "http://localhost:4000/",
+    "relUrl": "/"
+  },"7": {
+    "doc": "Connections",
+    "title": "Connections",
+    "content": "The PGL connections.yml file is where database destinations are configured. PGL allows for as many destinations as needed, and for each destination as many environments as is needed. For example a postgresql database could be configured as a destination, and multiple schemas could be used for different environments. The below snippet shows this under the top level conns dictionary. conns: database1: env1: db_type: postgres host: \"{{ env_var('POSTGRES_DB_HOST') }}\" user: \"{{ env_var('POSTGRES_DB_USER') }}\" password: \"{{ env_var('POSTGRES_DB_PASSWORD') }}\" port: 5432 database: d9k5gv2j90sgs8 destination_schema: pgl_dev env2: db_type: postgres host: \"{{ env_var('POSTGRES_DB_HOST') }}\" user: \"{{ env_var('POSTGRES_DB_USER') }}\" password: \"{{ env_var('POSTGRES_DB_PASSWORD') }}\" port: 5432 database: d9k5gv2j90sgs8 destination_schema: pgl_prod . dbt_type . dbt_type can be configured as one of the below options. | postges | snowflake | mariadb Next up: Project -&gt; | . ",
+    "url": "http://localhost:4000/connections",
+    "relUrl": "/connections"
+  },"8": {
+    "doc": "Pipelines",
+    "title": "Pipelines",
+    "content": "Pipelines are the core function of PGL. A PGL pipeline is defined as a single source file loading data into as single destination table. ",
+    "url": "http://localhost:4000/pipelines",
+    "relUrl": "/pipelines"
+  },"9": {
+    "doc": "Pipelines",
+    "title": "Configuration options",
+    "content": "conn . Destination database for loading file data into. Value for this configuration should be a database connection defined in the connections file . do_not_redownload . This is a boolean configuration which defaults to fase if not specified. When true, specifies NOT to copy and load a file from a source connection if that file has been received before (determined by name of file). delete_after_copy . This is a boolean configuration which defaults to false if not specified. When true, removes file from the source connection after copying to the file store. load_type . The technical method used for loading data into the database. | python_native - This load type essentially creates line by line insert statements for loading data into the database. This is the most inefficient method of loading data, however it is the most cross compatible and is useful when other options are not possible, such as when a cloud storage connection is not available. | copy_into_local - This load type runs a copy into statement from cloud storage into a database. This is the most efficient method for loading data | psql - &lt;br / &gt;Fill this in later. | . source_type . | ftp | s3 | azure_blob | local | internal_compressed_pipeline | . source_path . Path on the source where files can be found. host . This configuration only applies if ftp is the chosen source_type. This is the address of the ftp server where source data will be downloaded from. user . This configuration only applies if ftp is the chosen source_type. This is the user for the ftp server where source data will be downloaded from. password . This configuration only applies if ftp is the chosen source_type. This is the password for the ftp server where source data will be downloaded from. name . This is the identifier for the pipeline that can be referenced for specific targeted loads, and in parent configurations for inheritance. description . This is space for more information used for documentation purposes. format_definition . Need a whole thing for this. file_regex_patterns . A list of regex expressions for determining if a file should be downloaded or not. If a file name matches a regex expression it will be downloaded, and if it does not, it wil be left on the source. destination_table . Name of the table in the destination database that data will be loaded into. ",
+    "url": "http://localhost:4000/pipelines#configuration-options",
+    "relUrl": "/pipelines#configuration-options"
+  },"10": {
+    "doc": "Project",
+    "title": "Project",
+    "content": "A PGL project as stated in the project.yml file in the root of PGL cofig, defines configurations for a collection of pipelines. These pipelines do not have to be related, they could be an entire oragnization’s collection of pipelines. The pipelines.yml file has both global settings and pipeline defaults that should be set for a project. ",
+    "url": "http://localhost:4000/project",
+    "relUrl": "/project"
+  },"11": {
+    "doc": "Project",
+    "title": "Global Configurations",
+    "content": "Global settings are at the root level of the project file, and remain constant across all Pipelines. Below are all the global settings of a pipeline file . secret_mode: file_storage_mode: file_storage_bucket: file_storage_directory: . secret_mode . secret_mode only has the one below option, but more are to be added soon. If secret_mode is not defined, PGL will pick a default of environment_variable. | environment_variable | . file_storage_mode . file_storage_mode allows you to pick where the files downloaded from your orginal source are stored. If file_storage_mode is not defined, PGL will pick a default of s3. | s3 | azure_blob | local | . file_storage_bucket . file_storage_bucket allows you to pick a specific bucket in cloud storage to store the original files downloaded from source. Note that this is an optional configuration, and does not apply if file_storage_mode is set to local. If file_storage_bucket is not defined, PGL will pick a default of file-storage-bucket for the bucket name. file_storage_directory . file_storage_directory allows you to pick a directory to store files. If you are using cloud storage such as S3 or Azure Blob, this will be a prefix in the bucket you specified. If you are using local file storage, this will be a directory locally on the machine you are running PGL on. ",
+    "url": "http://localhost:4000/project#global-configurations",
+    "relUrl": "/project#global-configurations"
+  },"12": {
+    "doc": "Project",
+    "title": "Pipeline Configurations",
+    "content": "The pipelines section allows for setting defaults across all or a subset of pipelines. To set a default across all pipelines, put a configuration at the root of the pipelines dictionary. That configuration needs to have a + character before the configuration is stated, which implies it is a configuration that applies to downstream objects. For example if you wanted to say that all sources should default to have a source type of ftp, you could put a configuration of +source_type: ftp under the pipelines dictionary. Additionally, you can set defaults for a subset of pipelines based on their folder structure in the pipelines directory. See below for an example of this behavior. Any settings available at the pipeline level are eligible to be defaulted in the project.yml file under the pipelines dictionary. secret_mode: environment_variable file_storage_mode: local file_storage_directory: extracted_files # global pipeline configuration pipelines: # defaults - can be overwriten at pipeline level +source_type: ftp weather: ncdc: +host: ftp.ncei.noaa.gov\" . Next up: Pipelines -&gt; . ",
+    "url": "http://localhost:4000/project#pipeline-configurations",
+    "relUrl": "/project#pipeline-configurations"
+  },"13": {
+    "doc": "none",
+    "title": "Do something with the below",
+    "content": "A PGL project is composed of a profile.yml file containing project level configuration, a connections.yml containing configuration relevent to destination database connections and any number of modular “pipelines”, short yaml snippets that define a source and destination for data to be extracted from and loaded to. These pipeliens can be executed via a CLI in a number of ways to make scheduling and executing jobs easy and intuitive. Before getting started make sure you are familiar with contributing to a Git Repo and understand environment variables and secret management. These are all important to have a good handle on because data extraction and loading involves sensetive credentials. Understanding cloud services is a considerable advantage as well, although pgl can run on local files if that is not available. ",
+    "url": "http://localhost:4000/none#do-something-with-the-below",
+    "relUrl": "/none#do-something-with-the-below"
+  },"14": {
+    "doc": "none",
+    "title": "Project configuration",
+    "content": "Project.yml files are used to set up project level configuration as well as to set some global pipeline congiurations if applicable. Top level configurations in a project.yml file for setting up a pgl ingestion platform are: . file_storage_mode file_storage_bucket file_storage_directory secret_mode . file_storage_mode defines the type of storage platform that is to be used for the sourcefile repository. It can be s3 to store all the files ingested in a specific s3 bucket or local to store all ingested files in an accessable file system. blob storage should be added. file_storage_bucket defines the bucket that all the files that are ingested are stored in. Depending on the infrastructure setup you are working with, it could be a good idea to pass this in as an environment variable if using a different one for development vs. production. file_storage_directory defines the parent directory in the file_storage_bucket to store the files. Files will be given a prefix denoting where they came from and what type of file they are, but sometimes we would like to define a parent directory and not use the entire bucket just for the file_repository. secret_mode defines the method that secrets are stored in. Default is to store secrets in environment variables but this will be extended to use common secret stores. ",
+    "url": "http://localhost:4000/none#project-configuration",
+    "relUrl": "/none#project-configuration"
+  },"15": {
+    "doc": "none",
+    "title": "Pipeline Configuration",
+    "content": " ",
+    "url": "http://localhost:4000/none#pipeline-configuration",
+    "relUrl": "/none#pipeline-configuration"
+  },"16": {
+    "doc": "none",
+    "title": "pipeline",
+    "content": "A pipeline represents a file that gets pulled in from some source and gets dumped to a specific table. They can send many versions of that file perhaps daily or monthly that all follow the same structure/format of the given source_file. A pipeline definition can be organized into any file / directory in the pipelines directory of the git repo. Note that if a series of pipelines share configuration settings it can be set in the project.yml file to avoid having to duplicate configuration settings. See the example for how to go about that. Configuration tags are still in flux but the required ones are below. Note that these can come from global settings in profile.yml so if a lot of sources share a load_type, it can be set in project.yml and the actual pipeline yml snippet does not need to specify the load type. source_type source_path format_definition destination_table source_regex_matches load_type delete_after_copy do_not_redownload . source_type defines the type of source connection that the file lives on. s3, some local file storage system or an external sftp. source_path defines what path in the source connection system to look for the file, whether it be an s3 prefix or a filepath. format_definition defines the format for a given file. The value shold be a path within the format_definitions directory excluding the trailing .yml. More on the config of this file will come later. load_type defines the method with which to load the file into the databse . delete_after_copy is a boolean that tells quafl if we want to delete the file on the source system after downloading it to our internal sourcefile_repository . do_not_redownload is a boolean that tells quafl to ignore file names that have already been downloaded. For example if we do not delete_after_copy we want to have do_not_redownload be true to avoid downloading duplicate files from the source system . destination_table is the table name that this file will get loaded to. This is optional. The table will be created using the name as the table name if not specified. file_regex_pattern is a list of regex patterns that will be used to match filenames found in the directory to this particular sourcefile. for example filename_\\d{6}.txt will match filename_202101.txt and filename_202202.txt. so that we could load a file every month when the filenames have the date in them. ",
+    "url": "http://localhost:4000/none#pipeline",
+    "relUrl": "/none#pipeline"
+  },"17": {
+    "doc": "none",
+    "title": "format_definitions",
+    "content": "A format_definition is a configuration that specifies a specific format that a file comes in as. It should incldue the type of file (xlsx, delimited, etc.) as well as the schema (column names) and some additional optional params specifying things like “delimiter” or “quotechar” (quoting character) . Each source_file is linked to a format_definition. These format_definitions can be custom to a source_file or can be some industry standard format that can be shared between different source_files. Specific configurations are still tbd . ",
+    "url": "http://localhost:4000/none#format_definitions",
+    "relUrl": "/none#format_definitions"
+  },"18": {
+    "doc": "none",
+    "title": "Env Vars and Secrets",
+    "content": "Configuration files are made in yaml with the ability to pass in secrets and environment variables for most settings via jinja templating . \"\" \"\" or if the secret is a json and we want a key from it like aws secret manager does \"\" . values can also be passed in from the profile.yml in the ~/.pgl/ directory. with . \"\" . ",
+    "url": "http://localhost:4000/none#env-vars-and-secrets",
+    "relUrl": "/none#env-vars-and-secrets"
+  },"19": {
+    "doc": "none",
+    "title": "Example",
+    "content": " ",
+    "url": "http://localhost:4000/none#example",
+    "relUrl": "/none#example"
+  },"20": {
+    "doc": "none",
+    "title": "profile.yml",
+    "content": "# this means that all secrets are stored as environment variables secret_mode: environment_variable sourcefile_repository_mode: s3 # This comes from an environment variable sourcefile_bucket: env::SOURCEFILE_REPO_BUCKET # This comes from a secret sourcefile_download_directory: secret::SOURCEFILE_REPO_DIRECTORY # pipeline configuration # pipeline yaml files are placed in any given directory in the pipeline directory # they can be run at a directory level or file level # the leading + means that we will add this tag to everything in the directory # note that these tags can be overriden in the actual pipelines pipelines: # defaults +do_not_redownload: false +delete_after_copy: false +load_type: \"python_native\" # use copy into for all weather pipelines # note that things specified here will overwrite the above configuration tags # so all the weather directory pipelines will default to \"copy into\" where as all # the other pipeliens will default to \"python native\" weather: +load_type: \"copy_into\" +source_type: \"ftp\" . ",
+    "url": "http://localhost:4000/none#profileyml",
+    "relUrl": "/none#profileyml"
+  },"21": {
+    "doc": "none",
+    "title": "pipeline",
+    "content": "The name of the pipeline.yml file can be any valid filename and can hold however many pipelines as you would like. It is mainly an organizational preference. In the example they are grouped by cadence so it’s easy to see all the daily and all the monthly pipelines together. Pipelines are placed as a list under the pipelines tag. Below are 2 pipelines. Note that per the above project.yml, we are defaulting load_type and source_type so they dont need to be configured here. You can see that the “storm_events” has a load_type tag of python_native which means it will override the defaults set at the profile.yml file . pipelines: - name: storm_events description: &gt; National Centers for Environmental Information Storm data - events format_definition: ncdc/storm_details # overriding the global settings load_type: python_native # already set at profile.yml # source_type: ftp host: ftp.ncei.noaa.gov source_path: /pub/data/swdi/stormevents/csvfiles/ destination_table: src_storm_events file_regex_patterns: - StormEvents_details-ftp_v1.0_d1976_c20210803.csv.gz - name: storm_fatalities description: &gt; National Centers for Environmental Information Storm data - fatalities format_definition: ncdc/storm_fatalities # already set at profile.yml # load_type: copy_into # source_type: ftp host: ftp.ncei.noaa.gov source_path: /pub/data/swdi/stormevents/csvfiles/ destination_table: src_storm_fatalities file_regex_patterns: - StormEvents_fatalities-ftp_v1.0_d2011_c20220107.csv.gz . ",
+    "url": "http://localhost:4000/none#pipeline-1",
+    "relUrl": "/none#pipeline-1"
+  },"22": {
+    "doc": "none",
+    "title": "Execution",
+    "content": "The below 4 commands can be used to kick off pipeline ingestion executions . pgl run runs all pipelines pgl run --pipelines weather runs weather pipelines pgl run --pipelines weather.ncdc_daily runs daily weather pipelines pgl run --pipelines weather.ndcc_daily.storm_events runs only the storm event pipeline . ",
+    "url": "http://localhost:4000/none#execution",
+    "relUrl": "/none#execution"
+  },"23": {
+    "doc": "none",
+    "title": "none",
+    "content": " ",
+    "url": "http://localhost:4000/none",
+    "relUrl": "/none"
+  },"24": {
+    "doc": "Variables",
+    "title": "Variables",
+    "content": "It is strongly reccommended that when configuring connections, you should use variables for information that does not belong in source control. This would minimally be passwords, but it is suggested that hostnames, users, and passwords all are configured with variables. ",
+    "url": "http://localhost:4000/variables",
+    "relUrl": "/variables"
+  },"25": {
+    "doc": "Variables",
+    "title": "Environment Variables",
+    "content": "Environment variables are the simplest way to achieve variable substitution for sensitive values. When developing locally, you can create a file named .env in the root of your PGL project. This below is an example of what that file could look like. export POSTGRES_DB_HOST=example.your_db_host.com export POSTGRES_DB_USER=your_user export POSTGRES_DB_PASSWORD=your_password . Throughout PGL config, you can use environment variables with the following syntax {{ env_var('ENV_VAR_NAME') }}. Next up: Connections -&gt; . ",
+    "url": "http://localhost:4000/variables#environment-variables",
+    "relUrl": "/variables#environment-variables"
+  }
+}
